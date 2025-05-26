@@ -9,8 +9,8 @@ pipeline {
     stage('Notifier Discord') {
       steps {
         script {
-          def auteur = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
-          def message = sh(script: "git log -1 --pretty=format:'%s'", returnStdout: true).trim()
+          def auteur = sh(script: "git log origin/dev -1 --pretty=format:'%an'", returnStdout: true).trim()
+          def message = sh(script: "git log origin/dev -1 --pretty=format:'%s'", returnStdout: true).trim()
 
           sh """
             curl -H "Content-Type: application/json" -X POST \
