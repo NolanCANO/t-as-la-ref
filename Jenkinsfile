@@ -5,10 +5,6 @@ pipeline {
     githubPush()
   }
 
-  environment {
-    SONAR_SCANNER_HOME = tool 'SonarQube Scanner'
-  }
-
   stages {
     stage('Notifier Discord') {
       steps {
@@ -33,15 +29,14 @@ pipeline {
     stage('Analyse SonarQube') {
       steps {
         withSonarQubeEnv('SonarQube') {
-          sh """
-            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \\
-              -Dsonar.projectKey=t-as-la-ref \\
-              -Dsonar.sources=. \\
+          sh '''
+            sonar-scanner \
+              -Dsonar.projectKey=t-as-la-ref \
+              -Dsonar.sources=. \
               -Dsonar.host.url=http://sonarqube:9000
-          """
+          '''
         }
       }
     }
   }
 }
-
