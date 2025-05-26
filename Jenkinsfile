@@ -28,13 +28,14 @@ pipeline {
 
     stage('Analyse SonarQube') {
       steps {
-        withSonarQubeEnv('SonarQube') {
-          sh '''
-            sonar-scanner \
-              -Dsonar.projectKey=t-as-la-ref \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=http://sonarqube:9000
-          '''
+        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+            sh """
+                sonar-scanner \
+                -Dsonar.projectKey=t-as-la-ref \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=http://sonarqube:9000 \
+                -Dsonar.login=$SONAR_TOKEN
+            """
         }
       }
     }
