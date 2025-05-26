@@ -1,8 +1,12 @@
 pipeline {
   agent any
 
+  triggers {
+    githubPush()
+  }
+
   stages {
-    stage('Push détecté') {
+    stage('Notifier Discord') {
       steps {
         sh '''
           curl -H "Content-Type: application/json" -X POST \
