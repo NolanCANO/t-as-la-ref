@@ -14,7 +14,7 @@ pipeline {
           def message = sh(script: "git log -1 --pretty=format:'%s'", returnStdout: true).trim()
 
           def payload = """{
-            "content": "📢 Nouveau *push* détecté sur la branche \`${branchName}\` ! 🚀\\n👤 Auteur : ${auteur}\\n📝 Commit : ${message}"
+            "content": "📢 Nouveau *push* détecté sur la branche `${branchName}` ! 🚀\\n👤 Auteur : ${auteur}\\n📝 Commit : ${message}"
           }"""
 
           sh """
