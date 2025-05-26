@@ -1,17 +1,8 @@
 pipeline {
   agent any
 
-  triggers {
-    pollSCM('* * * * *') // Vérifie chaque minute les changements Git
-  }
-
   stages {
-    stage('Notifier Discord si push sur dev') {
-      when {
-        expression {
-          return env.BRANCH_NAME == 'dev'
-        }
-      }
+    stage('Push détecté') {
       steps {
         sh '''
           curl -H "Content-Type: application/json" -X POST \
