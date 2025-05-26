@@ -1,0 +1,24 @@
+pipeline {
+  agent any
+
+  triggers {
+    pollSCM('* * * * *') // Vérifie chaque minute les changements Git
+  }
+
+  stages {
+    stage('Notifier Discord si push sur dev') {
+      when {
+        expression {
+          return env.BRANCH_NAME == 'dev'
+        }
+      }
+      steps {
+        sh '''
+          curl -H "Content-Type: application/json" -X POST \
+          -d '{"content": "📢 Nouveau *push* détecté sur la branche `dev` ! 🚀"}' \
+          https://discordapp.com/api/webhooks/1376518952251035732/hpnDjsP3RtENgxTzfci2O563UXgIjZm8gcSduDStkDgrlVY_k5WRerHu3i-E4MU5QUPT
+        '''
+      }
+    }
+  }
+}
