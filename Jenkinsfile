@@ -1,4 +1,4 @@
-pipeline {
+pipeline { 
   agent any
 
   triggers {
@@ -6,8 +6,7 @@ pipeline {
   }
 
   environment {
-    SONAR_TOKEN = credentials('sonar-token') // ID du token dans Jenkins
-    SONAR_SCANNER_HOME = tool 'ManualSonarScanner'
+    SONAR_TOKEN = credentials('sonarqube-token') // ✅ ID corrigé ici
   }
 
   stages {
@@ -33,14 +32,14 @@ pipeline {
 
     stage('Analyse SonarQube') {
       steps {
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-          sh """
-            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \\
-              -Dsonar.projectKey=t-as-la-ref \\
-              -Dsonar.sources=. \\
-              -Dsonar.host.url=http://sonarqube:9000 \\
+        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) { // ✅ ici aussi
+          sh '''
+            sonar-scanner \
+              -Dsonar.projectKey=t-as-la-ref \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=http://sonarqube:9000 \
               -Dsonar.token=$SONAR_TOKEN
-          """
+          '''
         }
       }
     }
@@ -49,7 +48,7 @@ pipeline {
       steps {
         script {
           def payload = """{
-            "content": "✅ **Analyse SonarQube terminée avec succès !** 🔍\\n📊 Dashboard : http://sonarqube:9000/dashboard?id=t-as-la-ref"
+            "content": "✅ **Analyse SonarQube terminée avec succès !** 🔍\\n📊 Dashboard : http://localhost:9000/dashboard?id=t-as-la-ref"
           }"""
 
           sh """
@@ -62,4 +61,3 @@ pipeline {
     }
   }
 }
-
