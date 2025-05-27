@@ -6,7 +6,8 @@ pipeline {
   }
 
   environment {
-    SONAR_SCANNER_HOME = tool 'SonarQube Scanner'
+    SONAR_TOKEN = credentials('sonar-token') // ID du token dans Jenkins
+    SONAR_SCANNER_HOME = tool 'ManualSonarScanner'
   }
 
   stages {
@@ -34,22 +35,21 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
           sh """
-            sonar-scanner \\
+            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \\
               -Dsonar.projectKey=t-as-la-ref \\
               -Dsonar.sources=. \\
               -Dsonar.host.url=http://sonarqube:9000 \\
-              -Dsonar.login=${SONAR_TOKEN}
+              -Dsonar.token=$SONAR_TOKEN
           """
         }
       }
     }
 
-    stage('Notifier Résultat SonarQube') {
+    stage('Notification Analyse') {
       steps {
         script {
-          def sonarUrl = "http://sonarqube:9000/dashboard?id=t-as-la-ref"
           def payload = """{
-            "content": "🔍 **Analyse SonarQube terminée !**\\n📊 Voir le rapport ici : ${sonarUrl}"
+            "content": "✅ **Analyse SonarQube terminée avec succès !** 🔍\\n📊 Dashboard : http://sonarqube:9000/dashboard?id=t-as-la-ref"
           }"""
 
           sh """
