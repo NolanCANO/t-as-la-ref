@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    SONAR_TOKEN = credentials('sonarqube-token') // ✅ ID corrigé ici
+    SONAR_TOKEN = credentials('sonarqube-token')
   }
 
   stages {
@@ -32,12 +32,12 @@ pipeline {
 
     stage('Analyse SonarQube') {
       steps {
-        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) { // ✅ ici aussi
+        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
           sh '''
             sonar-scanner \
               -Dsonar.projectKey=t-as-la-ref \
               -Dsonar.sources=. \
-              -Dsonar.host.url=http://sonarqube:9000 \
+              -Dsonar.host.url=http://212.83.130.69:9000 \
               -Dsonar.token=$SONAR_TOKEN
           '''
         }
@@ -48,7 +48,7 @@ pipeline {
       steps {
         script {
           def payload = """{
-            "content": "✅ **Analyse SonarQube terminée avec succès !** 🔍\\n📊 Dashboard : http://localhost:9000/dashboard?id=t-as-la-ref"
+            "content": "✅ **Analyse SonarQube terminée avec succès !** 🔍\\n📊 Dashboard : http://212.83.130.69:9000/dashboard?id=t-as-la-ref"
           }"""
 
           sh """
