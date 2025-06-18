@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header';
+import GameVignet from './GameVignet';
 
 const Accueil: React.FC = () => {
     return (
@@ -18,11 +19,17 @@ const Accueil: React.FC = () => {
                             <p className="text-xl font-bold text-white">Rejoindre</p>
                         </button>
                     </div>
-                    <div className="bg-green-200 w-full h-4/5 flex-1 rounded-lg p-2 overflow-auto">
+                    <div className="bg-green-200 w-full h-4/5 flex-1 rounded-lg p-4">
+                        <div className="grid grid-cols-3 gap-4">
+                            <GameVignet />
+                            <GameVignet />
+                            <GameVignet />
+                            <GameVignet />
+                        </div>
                     </div>
                 </div>
                 <div className="bg-blue-400 w-2/6 h-full p-2 overflow-auto">
-                    Bienvenue sur notre application !
+                    
                 </div>
             </div>
         </div>
