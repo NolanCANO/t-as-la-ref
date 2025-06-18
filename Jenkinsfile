@@ -1,15 +1,12 @@
-pipeline { 
+pipeline {
   agent any
 
   triggers {
     githubPush()
   }
 
-  environment {
-    SONAR_TOKEN = credentials('sonarqube-token')
-  }
-
   stages {
+
     stage('Notifier Discord') {
       steps {
         script {
