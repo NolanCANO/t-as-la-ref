@@ -1,0 +1,21 @@
+# .github/workflows/deploy-prod.yml
+name: Deploy to Production
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Staging"]
+    types:
+      - completed
+
+jobs:
+  deploy-prod:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+
+      - name: Deploy to production
+        run: echo "Déploiement en production terminé ✅"
