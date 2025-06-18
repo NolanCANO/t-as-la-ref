@@ -11,11 +11,32 @@ jobs:
   deploy-staging:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: build-output
 
-      - name: Deploy to staging
-        run: echo "Déploiement sur l'environnement de staging..."
+      - name: Copy files to remote server via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."          
+          target: ${{ secrets.REMOTE_PATH }}
+
+      - name: Run remote deployment commands via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.REMOTE_PATH }}
+            npm install                       # installe les dépendances si nécessaire
+            pm2 restart app.js                # redémarre ton appli (ex: Node.js via PM2)
