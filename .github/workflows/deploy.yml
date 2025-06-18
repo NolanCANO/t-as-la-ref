@@ -38,5 +38,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.REMOTE_PATH }}
-            npm install                       # installe les dépendances si nécessaire
-            pm2 restart app.js                # redémarre ton appli (ex: Node.js via PM2)
+            npm install
+            pm2 restart app.js
